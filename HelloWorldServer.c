@@ -53,9 +53,12 @@ int main(){
 			printf("rcvBuffer: %s\n", rcvBuffer);
 			if(strncasecmp(rcvBuffer, "quit",4) == 0 || strncasecmp(rcvBuffer, "kill server", 11) == 0
 			   break;
-			   else if (!strncasecmp(rcvBuffer,"안녕하세요",strlen("안녕하세요"))
+			   else if (!strncasecmp(rcvBuffer,"안녕하세요",strlen("안녕하세요")))
 				strcpy(buffer,"안녕하세요 만나서 반가워요"); //5-2 안녕하세요 -> 이름이 뭐야로 변경, 대답을 이름으로 변경, else if문을 늘릴수록 대답이 많아짐
-				    else
+			   else if (!strncasecmp(rcvBuffer,"strlen" , strlen("strlen ")))
+				//문자열의 길이는 XX입니다.
+				sprintf(buffer, "문자열의 길이는 %d입니다.",strlen(rcvBuffer)-7);	
+			   else
 				strcpy(buffer, "무슨 말인지 모르겠습니다");
 				    
 			write(c_socket, buffer, strlen(buffer)); //클라이언트에게 buffer의 내용을 전송함
