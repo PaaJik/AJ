@@ -6,7 +6,7 @@
 #define PORT 10000
 
 char buffer[100] = "Hi, i'm server.\n";
-//sizeof(buffer) => 100 (¹è¿­ÀÇ Å©±â)
+//sizeof(buffer) => 100 (ë°°ì—´ì˜ í¬ê¸°)
 //strlen 
 char rcvBuffer[100];
 
@@ -16,50 +16,50 @@ int main(){
 	int len;
 	int n;
 
-	// 1. ¼­¹ö ¼ÒÄÏ »ı¼º
-	//¼­¹ö ¼ÒÄÏ = Å¬¶óÀÌ¾ğÆ®ÀÇ Á¢¼Ó ¿äÃ»À» Ã³¸®(Çã¿ë)ÇØ ÁÖ±â À§ÇÑ ¼ÒÄÏ
-	s_socket = socket(PF_INET, SOCK_STREAM, 0); //TCP/IP Åë½ÅÀ» À§ÇÑ ¼­¹ö ¼ÒÄÏ »ı¼º
+	// 1. ì„œë²„ ì†Œì¼“ ìƒì„±
+	//ì„œë²„ ì†Œì¼“ = í´ë¼ì´ì–¸íŠ¸ì˜ ì ‘ì† ìš”ì²­ì„ ì²˜ë¦¬(í—ˆìš©)í•´ ì£¼ê¸° ìœ„í•œ ì†Œì¼“
+	s_socket = socket(PF_INET, SOCK_STREAM, 0); //TCP/IP í†µì‹ ì„ ìœ„í•œ ì„œë²„ ì†Œì¼“ ìƒì„±
 	
-	//2. ¼­¹ö ¼ÒÄÏ ÁÖ¼Ò ¼³Á¤
-	memset(&s_addr, 0, sizeof(s_addr)); //s_addrÀÇ °ªÀ» ¸ğµÎ 0À¸·Î  ÃÊ±âÈ­
-	s_addr.sin_addr.s_addr = htonl(INADDR_ANY); //IP ÁÖ¼Ò ¼³Á¤
+	//2. ì„œë²„ ì†Œì¼“ ì£¼ì†Œ ì„¤ì •
+	memset(&s_addr, 0, sizeof(s_addr)); //s_addrì˜ ê°’ì„ ëª¨ë‘ 0ìœ¼ë¡œ  ì´ˆê¸°í™”
+	s_addr.sin_addr.s_addr = htonl(INADDR_ANY); //IP ì£¼ì†Œ ì„¤ì •
 	s_addr.sin_family = AF_INET;
 	s_addr.sin_port = htons(PORT);
 
-	//3. ¼­¹ö ¼ÒÄÏ¹ÙÀÎµù
+	//3. ì„œë²„ ì†Œì¼“ë°”ì¸ë”©
 	if(bind(s_socket,(struct sockaddr *) &s_addr, sizeof(s_addr)) == -1){ 
-		//¹ÙÀÎµù ÀÛ¾÷ ½ÇÆĞ ½Ã, Cannot Bind ¸Ş½ÃÁö Ãâ·Â ÈÄ ÇÁ·Î±×·¥ Á¾·á
+		//ë°”ì¸ë”© ì‘ì—… ì‹¤íŒ¨ ì‹œ, Cannot Bind ë©”ì‹œì§€ ì¶œë ¥ í›„ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
 		printf("Cannot Bind\n");
 		return -1;
 	}
 	
-	//4.listen() ÇÔ¼ö ½ÇÇà
+	//4.listen() í•¨ìˆ˜ ì‹¤í–‰
 	if(listen(s_socket, 5) == -1){
 		printf("listen Fail\n");
 		return -1;
 	}
 
-	//5. Å¬¶óÀÌ¾ğÆ® ¿äÃ» Ã³¸®
-	// ¿äÃ»À» Çã¿ëÇÑ ÈÄ, Hello World ¸Ş¼¼Áö¸¦ Àü¼ÛÇÔ
-	while(1){ //¹«ÇÑ ·çÇÁ
+	//5. í´ë¼ì´ì–¸íŠ¸ ìš”ì²­ ì²˜ë¦¬
+	// ìš”ì²­ì„ í—ˆìš©í•œ í›„, Hello World ë©”ì„¸ì§€ë¥¼ ì „ì†¡í•¨
+	while(1){ //ë¬´í•œ ë£¨í”„
 		len = sizeof(c_addr);
-		printf("Å¬¶óÀÌ¾ğÆ® Á¢¼ÓÀ» ±â´Ù¸®´Â Áß....\n");
+		printf("í´ë¼ì´ì–¸íŠ¸ ì ‘ì†ì„ ê¸°ë‹¤ë¦¬ëŠ” ì¤‘....\n");
 		c_socket = accept(s_socket, (struct sockaddr *)&c_addr, &len); 
-		//Å¬¶óÀÌ¾ğÆ®ÀÇ ¿äÃ»ÀÌ ¿À¸é Çã¿ë(accept)ÇØ ÁÖ°í, ÇØ´ç Å¬¶óÀÌ¾ğÆ®¿Í Åë½ÅÇÒ ¼ö ÀÖµµ·Ï Å¬¶óÀÌ¾ğÆ® ¼ÒÄÏ(c_socket)À» ¹İÈ¯ÇÔ.
+		//í´ë¼ì´ì–¸íŠ¸ì˜ ìš”ì²­ì´ ì˜¤ë©´ í—ˆìš©(accept)í•´ ì£¼ê³ , í•´ë‹¹ í´ë¼ì´ì–¸íŠ¸ì™€ í†µì‹ í•  ìˆ˜ ìˆë„ë¡ í´ë¼ì´ì–¸íŠ¸ ì†Œì¼“(c_socket)ì„ ë°˜í™˜í•¨.
 		printf("/client is connected\n");
-		printf("Å¬¶óÀÌ¾ğÆ® Á¢¼Ó Çã¿ë\n");
+		printf("í´ë¼ì´ì–¸íŠ¸ ì ‘ì† í—ˆìš©\n");
 		while(1){
 			n = read(c_socket, rcvBuffer,sizeof(rcvBuffer));
 			printf("rcvBuffer: %s\n", rcvBuffer);
 			if(strncasecmp(rcvBuffer, "quit",4) == 0 || strncasecmp(rcvBuffer, "kill server", 11) == 0
 			   break;
-			   else if (!strncasecmp(rcvBuffer,"¾È³çÇÏ¼¼¿ä",strlen("¾È³çÇÏ¼¼¿ä")))
-				strcpy(buffer,"¾È³çÇÏ¼¼¿ä ¸¸³ª¼­ ¹İ°¡¿ö¿ä"); //5-2 ¾È³çÇÏ¼¼¿ä -> ÀÌ¸§ÀÌ ¹¹¾ß·Î º¯°æ, ´ë´äÀ» ÀÌ¸§À¸·Î º¯°æ, else if¹®À» ´Ã¸±¼ö·Ï ´ë´äÀÌ ¸¹¾ÆÁü
+			   else if (!strncasecmp(rcvBuffer,"ì•ˆë…•í•˜ì„¸ìš”",strlen("ì•ˆë…•í•˜ì„¸ìš”")))
+				strcpy(buffer,"ì•ˆë…•í•˜ì„¸ìš” ë§Œë‚˜ì„œ ë°˜ê°€ì›Œìš”"); //5-2 ì•ˆë…•í•˜ì„¸ìš” -> ì´ë¦„ì´ ë­ì•¼ë¡œ ë³€ê²½, ëŒ€ë‹µì„ ì´ë¦„ìœ¼ë¡œ ë³€ê²½, else ifë¬¸ì„ ëŠ˜ë¦´ìˆ˜ë¡ ëŒ€ë‹µì´ ë§ì•„ì§
 			   else if (!strncasecmp(rcvBuffer,"strlen" , strlen("strlen ")))
-				//¹®ÀÚ¿­ÀÇ ±æÀÌ´Â XXÀÔ´Ï´Ù.
-				sprintf(buffer, "¹®ÀÚ¿­ÀÇ ±æÀÌ´Â %dÀÔ´Ï´Ù.",strlen(rcvBuffer)-7);	
+				//ë¬¸ìì—´ì˜ ê¸¸ì´ëŠ” XXì…ë‹ˆë‹¤.
+				sprintf(buffer, "ë¬¸ìì—´ì˜ ê¸¸ì´ëŠ” %dì…ë‹ˆë‹¤.",strlen(rcvBuffer)-7);	
 			   else
-				strcpy(buffer, "¹«½¼ ¸»ÀÎÁö ¸ğ¸£°Ú½À´Ï´Ù");
+				strcpy(buffer, "ë¬´ìŠ¨ ë§ì¸ì§€ ëª¨ë¥´ê² ìŠµë‹ˆë‹¤");
 				char *token;
 	char *str[3];
 	int idx = 0;
@@ -73,15 +73,15 @@ int main(){
 		token = strtok(NULL, " ");
 	}
 	if(idx < 3)
-		strcpy(buffer, "¹®ÀÚ¿­ ºñ±³¸¦ À§ÇØ¼­´Â µÎ ¹®ÀÚ¿­ÀÌ ÇÊ¿äÇÕ´Ï´Ù");
-	else if(!strcmp(str[1], str[2])) //°°Àº ¹®ÀÚ¿­ÀÌ¸é
-	     sprintf(buffer, "%s¿Í %s´Â °°Àº ¹®ÀÚ¿­ÀÔ´Ï´Ù", str[1], str[2]);
+		strcpy(buffer, "ë¬¸ìì—´ ë¹„êµë¥¼ ìœ„í•´ì„œëŠ” ë‘ ë¬¸ìì—´ì´ í•„ìš”í•©ë‹ˆë‹¤");
+	else if(!strcmp(str[1], str[2])) //ê°™ì€ ë¬¸ìì—´ì´ë©´
+	     sprintf(buffer, "%sì™€ %sëŠ” ê°™ì€ ë¬¸ìì—´ì…ë‹ˆë‹¤", str[1], str[2]);
 	else
-	     sprintf(buffer, "%s¿Í $s´Â ´Ù¸¥ ¹®ÀÚ¿­ÀÔ´Ï´Ù", str[1], str[2]);
+	     sprintf(buffer, "%sì™€ %sëŠ” ë‹¤ë¥¸ ë¬¸ìì—´ì…ë‹ˆë‹¤", str[1], str[2]);
 		
-	printf("%s\n",buffer); //srpitnf´Â ¹öÆÛ¿¡ ÀúÀåÇÏ´Â°Í, Ãâ·ÂÇÏ·Á¸é printf »ç¿ë
+	printf("%s\n",buffer); //srpitnfëŠ” ë²„í¼ì— ì €ì¥í•˜ëŠ”ê²ƒ, ì¶œë ¥í•˜ë ¤ë©´ printf ì‚¬ìš©
 				    
-			write(c_socket, buffer, strlen(buffer)); //Å¬¶óÀÌ¾ğÆ®¿¡°Ô bufferÀÇ ³»¿ëÀ» Àü¼ÛÇÔ
+			write(c_socket, buffer, strlen(buffer)); //í´ë¼ì´ì–¸íŠ¸ì—ê²Œ bufferì˜ ë‚´ìš©ì„ ì „ì†¡í•¨
 		close(c_socket);
 		if (strncasecmp(rcvBuffer,"kill server", 11) == 0
 		break;
