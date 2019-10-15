@@ -1,15 +1,20 @@
 #include <stdio.h>
-#include<string.h>
+#include <string.h>
 
 int main(){
 	char buffer[100] = "strcmp str1 str2";;
-	char "token;
+	char *token;
+	char *str[3];
+	int idx = 0;
 	token = strtok(buffer," ");
 	printf("1: %s\n", token); //strcmp
-	token = strtok(NULL," " );
-	printf("2: %s\n", token); //str1
-	token = strtok(NULL," " );
-	printf("3: %s\n", token); //str2
-
+	
+	while (token != NULL){
+		str[idx] = token;
+		printf("str[%d] = %s\n", idx, str[idx]);
+		idx++;
+		token = strtok(NULL, " ");
+	
+	}
 	return 0;
 }
