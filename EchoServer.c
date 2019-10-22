@@ -82,8 +82,18 @@ int main(){
 			   
 			   } else if (!strcmp(rcvBuffer, "readfile ")){
 			   char *token;
+		 	   char *str[10];
+	 		   int cnt = 0;  
+				   
 				token - strtok(rcvBuffer, " "); //token = readfile
-				token = strtok(NULL, " ");//token = <파일명>
+				   while(token != NULL){
+					   str[cnt] = token; //str[0] = readfile, str[1] = <파일명>
+					   cnt ++;
+					   token = strtok(NULL, " "); //token = <파일명>
+				   }
+				   if(cnt < 2) {
+					   strcpy(buffer, "파일명을 입력해주세요");
+				   }else{
 				FILE *fp = fopen(token, "r");
 				if(fp){//정상적으로 파일이 오픈된다면,
 					char tempStr[BUFSIZE]; //파일 내용을 저장할 변수 
@@ -94,9 +104,11 @@ int main(){
 					 fclose(fp);
 				}else { //해당 파일이 없는 경우.
 					strcpy(buffer, "해당 파일은 존재하지 않습니다");
-			   }else
+				}
+			}else
 			   strcpy(buffer, "무슨 말인지 모르겠습니다");
-			   
+					      
+					      
 			   write(c_socket, buffer, strlen(buffer)); //클라이언트가
 			   }
 			   close(c_socket);
