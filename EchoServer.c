@@ -4,11 +4,12 @@
 #include <string.h>
 
 #define PORT 10000
+#define BUFSIZE 10000
 
-char buffer[100] = "Hi, i'm server.\n";
+char buffer[BUFSIZE] = "Hi, i'm server.\n";
 //sizeof(buffer) => 100 (배열의 크기)
 //strlen 
-char rcvBuffer[100];
+char rcvBuffer[BUFSIZE];
 
 int main(){
 	int c_socket, s_socket;
@@ -78,6 +79,28 @@ int main(){
 	     sprintf(buffer, "%s와 %s는 같은 문자열입니다", str[1], str[2]);
 	else
 	     sprintf(buffer, "%s와 %s는 다른 문자열입니다", str[1], str[2]);
+			   
+			   } else if (!strcmp(rcvBuffer, "readfile ")){
+			   char *token;
+				token - strtok(rcvBuffer, " "); //token = readfile
+				token = strtok(NULL, " ");//token = <파일명>
+				FILE *fp = fopen(token, "r");
+				if(fp){//정상적으로 파일이 오픈된다면,
+					char tempStr[BUFSIZE]; //파일 내용을 저장할 변수 
+					memset(buffer, 0, BUFSIZE); //buffer 초기화 
+					while(fgets(tempStr, BUFSIZE, (FILE *fp)){
+						strcat(buffer, tempStr); // 여러 줄의 내용을 하나의 buffer에 저장하기 위해 strcat() 함수 사용
+					}
+					 fclose(fp);
+				}else { //해당 파일이 없는 경우.
+					strcpy(buffer, "해당 파일은 존재하지 않습니다");
+			   }else
+			   strcpy(buffer, "무슨 말인지 모르겠습니다");
+			   
+			   write(c_socket, buffer, strlen(buffer)); //클라이언트가
+			   }
+			   close(c_socket);
+		
 		
 	printf("%s\n",buffer); //srpitnf는 버퍼에 저장하는것, 출력하려면 printf 사용
 				    
