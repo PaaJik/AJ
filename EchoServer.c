@@ -105,6 +105,18 @@ int main(){
 				}else { //해당 파일이 없는 경우.
 					strcpy(buffer, "해당 파일은 존재하지 않습니다");
 				}
+			}
+				}else if (!strcasecmp(rcvBuffer, "exec " , S)){
+				char *command;
+				char *token;
+				token = strtok(rcvBuffer, " ");//token = exec
+				strtok(NULL, "\0");//exec 뒤에 있는 모든 문자열을 command로 저장
+				printf("command:%s\n",command);
+				int result = system(command); //command가 정상 실행되면 0을 리턴, 그렇지 않으면 에러코드
+				if(!result) //성공한 경우,
+					sprintf(buffer, "[%s] 명령어가 성공했습니다",command);
+				else 
+					sprintf(buffer, "[%s] 명령어가 실패했습니다", command);
 			}else
 			   strcpy(buffer, "무슨 말인지 모르겠습니다");
 					      
