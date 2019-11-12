@@ -2,6 +2,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <string.h>
+#include <signal.h>
+#include <sys/wait.h>
 
 #define PORT 10000
 #define BUFSIZE 10000
@@ -18,7 +20,10 @@ int main(){
 	struct sockaddr_in s_addr, c_addr;
 	int len;
 	int n;
-
+	int numClient = 0;
+	
+	signal(SIGCHLD, sig_handler); //첫번째 인지, 시그널번호, 두번째 인지
+	
 	// 1. 서버 소켓 생성
 	//서버 소켓 = 클라이언트의 접속 요청을 처리(허용)해 주기 위한 소켓
 	s_socket = socket(PF_INET, SOCK_STREAM, 0); //TCP/IP 통신을 위한 서버 소켓 생성
@@ -50,7 +55,21 @@ int main(){
 		c_socket = accept(s_socket, (struct sockaddr *)&c_addr, &len); 
 		//클라이언트의 요청이 오면 허용(accept)해 주고, 해당 클라이언트와 통신할 수 있도록 클라이언트 소켓(c_socket)을 반환함.
 		printf("/client is connected\n");
-		printf("클라이언트 접속 허용\n");
+		numClient++;
+		printf("[%d]번째 클라이언트 접속 허용\n, numClient");
+		
+		int pid = fork();
+		if(pid > 0) { //부모 프로세스
+			continue;
+		}else if (pid == 0) { //자식 프로세스
+			do_service(c_socket);
+			numClient--;
+			exit(0);
+		}else { //fork 함수 실패
+			printf("fork() failed\n");
+			exit(0);
+		}
+		
 		do_service(c_socket);
 	}
 	close(s_socket);
@@ -133,6 +152,14 @@ void do_service(int c_socket) {
 			   }
 			   close(c_socket);
 		
+	void sig_handler(int signo){
+		int pid;
+		int status;
+		pid = wait(&status);
+		printf("pid[%d] is terminated status = %d \n", pid,status);
+		numClient--;
+		printf("현재 접속 중인 클라이언트 수 : %n",numClient);
+	}
 		
 	printf("%s\n",buffer); //srpitnf는 버퍼에 저장하는것, 출력하려면 printf 사용
 				    
