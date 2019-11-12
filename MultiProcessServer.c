@@ -11,6 +11,8 @@ char buffer[BUFSIZE] = "Hi, i'm server.\n";
 //strlen 
 char rcvBuffer[BUFSIZE];
 
+void do_service(int c_socket);
+
 int main(){
 	int c_socket, s_socket;
 	struct sockaddr_in s_addr, c_addr;
@@ -49,7 +51,13 @@ int main(){
 		//클라이언트의 요청이 오면 허용(accept)해 주고, 해당 클라이언트와 통신할 수 있도록 클라이언트 소켓(c_socket)을 반환함.
 		printf("/client is connected\n");
 		printf("클라이언트 접속 허용\n");
-		while(1){
+		do_service(c_socket);
+	}
+	close(s_socket);
+	return 0;	
+		    }
+void do_service(int c_socket) {
+	while(1){
 			n = read(c_socket, rcvBuffer,sizeof(rcvBuffer));
 			printf("rcvBuffer: %s\n", rcvBuffer);
 			if(strncasecmp(rcvBuffer, "quit",4) == 0 || strncasecmp(rcvBuffer, "kill server", 11) == 0
@@ -62,7 +70,7 @@ int main(){
 			   else
 				strcpy(buffer, "무슨 말인지 모르겠습니다");
 				char *token;
-	char *str[3];
+			   char *str[3];
 	int idx = 0;
 	token = strtok(buffer," ");
 	printf("1: %s\n", token); //strcmp
@@ -132,7 +140,4 @@ int main(){
 		close(c_socket);
 		if (strncasecmp(rcvBuffer,"kill server", 11) == 0
 		break;
-	}
-	close(s_socket);
-	return 0;	
 }
